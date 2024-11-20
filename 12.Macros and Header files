@@ -1,0 +1,16 @@
+%{
+#include <stdio.h>
+%}
+%%
+"//#".*               { /* Ignore single-line comments */ }
+"#define"            { printf("Macro definition: %s", yytext); }  // Match macro definitions like #define
+"#include"          { printf("Header file included: %s", yytext); } // Match header file inclusions like #include
+[ \t\n]+             { /* Ignore whitespaces and newlines */ }
+.|\n                 { printf("Non-macro/header line: %s", yytext); } // Other lines
+%%
+int yywrap(void) { return 1; }
+int main() {
+    printf("Enter the input (Ctrl+D to end):\n");
+    yylex();
+    return 0;
+}
