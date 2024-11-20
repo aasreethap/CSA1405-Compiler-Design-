@@ -1,0 +1,16 @@
+%{
+#include <stdio.h>
+int inside_comment = 0; // Flag to track if we are inside a multi-line comment
+%}
+%%
+"//".*             { printf("Single-line comment\n"); }    // Detect single-line comments
+"/\*"              { inside_comment = 1; printf("Multi-line comment starts\n"); } // Start of multi-line comment
+"\*/"              { inside_comment = 0; printf("Multi-line comment ends\n"); }   // End of multi-line comment
+.|\n               { if (!inside_comment) printf("Not a comment\n"); } // Print "Not a comment" for non-comment text
+%%
+int yywrap(void) { return 1; }
+int main() {
+    printf("Enter the input (Ctrl+D to end):\n");
+    yylex();
+    return 0;
+}
