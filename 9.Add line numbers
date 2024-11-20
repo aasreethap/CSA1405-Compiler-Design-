@@ -1,0 +1,14 @@
+%{
+#include <stdio.h>
+int line_number = 1;  // To track line numbers
+%}
+%%
+\n                  { printf("%d: ", line_number++); } // Print the line number at the beginning of each line
+.|\n                { putchar(yytext[0]); } // Print each character of the line
+%%
+int yywrap(void) { return 1; }
+int main() {
+    printf("Enter the input (Ctrl+D to end):\n");
+    yylex();
+    return 0;
+}
