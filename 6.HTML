@@ -1,0 +1,21 @@
+%{
+#include <stdio.h>
+int tag_count = 0;       // Counter for HTML tags
+int attribute_count = 0; // Counter for attributes
+int text_count = 0;      // Counter for text content
+%}
+%%
+<[^>]+>              { tag_count++; }              // Match HTML tags
+[a-zA-Z]+=\"[^\"]*\" { attribute_count++; }        // Match attributes (key="value")
+[^<>\n]+             { text_count++; }             // Match plain text (not within tags)
+.|\n                 { /* Ignore everything else */ }
+%%
+int yywrap(void) { return 1; }
+int main() {
+    printf("Enter the HTML content (end with Ctrl+D):\n");
+    yylex();
+    printf("Number of tags: %d\n", tag_count);
+    printf("Number of attributes: %d\n", attribute_count);
+    printf("Number of text contents: %d\n", text_count);
+    return 0;
+}
